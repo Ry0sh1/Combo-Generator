@@ -1,0 +1,64 @@
+html{
+    background-color: #1f1f1f;
+    color: #efefef;
+    font-family: Arial, serif;
+}
+.centered{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+#generate_combo{
+    background-color: #009a00;
+    border-radius: 16px;
+    border: none;
+    padding: 16px 20px;
+    font-weight: bold;
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: #efefef;
+}
+#generate_combo:hover{
+    background-color: #efefef;
+    color: #009a00;
+}
+#generate_combo:active{
+    opacity: 0.2;
+}
+#amount_moves{
+    font-size: 1.4rem;
+}
+.margin{
+    margin: 10px;
+}
+.opacity{
+    opacity: 0.5;
+}
+#move_slider{
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    outline: none;
+    background: #efefef;
+    width: 200px;
+}
+#move_slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #009a00;
+    cursor: pointer;
+}
+#move_slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #009a00;
+    cursor: pointer;
+}
+#final_combo{
+    width: 300px;
+    text-align: center;
+}

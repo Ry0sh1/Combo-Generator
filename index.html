@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Animator's Combo Generator</title>
+  <link href="style.css" rel="stylesheet">
+</head>
+<body>
+<div class="centered">
+  <header class="margin">
+    <h1>Animator's Combo Generator</h1>
+  </header>
+  <div class="margin centered" id="combo">
+    <p class="opacity" id="final_combo">Your Combo will be displayed here</p>
+  </div>
+  <div class="slide_container margin centered">
+    <div id="amount_moves"></div>
+    <input type="range" id="move_slider" min="4" max="30" value="4" class="slider">
+  </div>
+  <div class="margin">
+    <button onclick="createCombo()" id="generate_combo">Generate Combo</button>
+  </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
