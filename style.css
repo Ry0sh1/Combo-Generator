@@ -60,5 +60,7 @@ html{
 }
 #final_combo{
     width: 300px;
+    height: 200px;
+    font-size: 1.3rem;
     text-align: center;
 }

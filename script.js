@@ -43,13 +43,13 @@ function createCombo(){
     }
     if (amountMoves >= 8){
         for (let i = 0;i<moves-1;i++){
-            if (Math.random()<0.1){
-                let ran = randomIntFromInterval(0,CATEGORIES.length);
-                if (ran === CATEGORIES.length){
+            if (Math.random()<0.3){
+                let ran = randomIntFromInterval(0,CATEGORIES.length-1);
+                if (ran === CATEGORIES.length-1){
                     finalCombo.push(randomCombinedMove());
                 }else {
                     let category = CATEGORIES[ran];
-                    finalCombo.push(category[randomIntFromInterval(0,category.length)]);
+                    finalCombo.push(category[randomIntFromInterval(0,category.length-1)]);
                 }
             }else {
                 finalCombo.push(generateBasicAttackMove());
@@ -80,6 +80,7 @@ function showCombo(){
     }
     string += finalCombo[finalCombo.length-1];
     document.getElementById("final_combo").innerText = string;
+    document.getElementById("final_combo").classList.remove("opacity");
 }
 function randomCombinedMove(){
     return "" + MOVEMENT[randomIntFromInterval(0,MOVEMENT.length-1)] + " " + BASIC_ATTACKS[randomIntFromInterval(0,BASIC_ATTACKS.length-1)];
