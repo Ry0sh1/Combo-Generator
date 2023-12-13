@@ -48,11 +48,15 @@ function onLoad(){
     }
 }
 
-function toggleMove(category,move, moveLabel){
+function toggleMove(category,move,moveLabel){
     const index = category.indexOf(move);
     if (index !== -1){
         moveLabel.classList.add("opacity");
         category.splice(index, 1);
+        if (category.length===0){
+            CATEGORY_NAMES.splice(CATEGORIES.indexOf(category));
+            CATEGORIES.splice(CATEGORIES.indexOf(category));
+        }
     }else {
         moveLabel.classList.remove("opacity");
         category.push(move);
@@ -64,9 +68,13 @@ function toggleMove(category,move, moveLabel){
 function createCombo(){
     let moves = amountMoves;
     finalCombo = [];
-    if (Math.random() >= 0.5){
+    if (Math.random() >= 0.5 && MOVEMENT.length>0){
         finalCombo.push(randomCombinedMove());
         moves--;
+    }
+    if (BASIC_ATTACKS.length===0){
+        document.getElementById("final_combo").innerText = "Pls add a Basic Attack";
+        return;
     }
     if (amountMoves<6){
         for (let i = 0;i<moves;i++){
