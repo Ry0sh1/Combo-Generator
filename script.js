@@ -14,6 +14,7 @@ const MOVEMENT = ["Backflip","Frontflip","Slide","Spin","Jump","Wallrun","Dash",
 const FINISHER_MOVES = ["Neck Slap","Falcon Punch","Back Break","Downward Kick","Karate Chop"];
 
 const CATEGORIES = [BASIC_ATTACKS,HEAVY_ATTACKS,DEFENSIVE,CROWD_CONTROL,MOVEMENT,FINISHER_MOVES];
+const CATEGORY_NAMES = ["Basic Attacks","Heavy Attacks","Defensive Attacks","Crowd Control","Movement","Finisher Move"]
 let amountMoves = 4; //Minimum is 4
 let finalCombo = [];
 const AMOUNT_MOVES = document.getElementById("amount_moves");
@@ -23,6 +24,43 @@ MOVE_SLIDER.oninput = function() {
     amountMoves = this.value;
     AMOUNT_MOVES.innerHTML = this.value;
 }
+
+function onLoad(){
+    let moveOverviewContainer = document.getElementById("moves");
+    for (let i = 0;i<CATEGORIES.length;i++){
+        let currentCategory = CATEGORIES[i];
+        let categoryContainer = document.createElement("div");
+        categoryContainer.id = `category_${CATEGORY_NAMES[i]}`;
+        categoryContainer.classList.add("category_container");
+        categoryContainer.classList.add("centered");
+        for (let j = 0;j<currentCategory.length;j++){
+            let moveLabel = document.createElement("label");
+            let move = `${currentCategory[j]}`;
+            moveLabel.id = `move_${move}`
+            moveLabel.innerText = `${move}`;
+            moveLabel.classList.add("move_label");
+            moveLabel.addEventListener("click",function () {
+                toggleMove(currentCategory,move,moveLabel)
+            });
+            categoryContainer.append(moveLabel);
+        }
+        moveOverviewContainer.append(categoryContainer);
+    }
+}
+
+function toggleMove(category,move, moveLabel){
+    const index = category.indexOf(move);
+    if (index !== -1){
+        moveLabel.classList.add("opacity");
+        category.splice(index, 1);
+    }else {
+        moveLabel.classList.remove("opacity");
+        category.push(move);
+    }
+}
+
+//Only for the generating a combo!!
+
 function createCombo(){
     let moves = amountMoves;
     finalCombo = [];
@@ -97,15 +135,15 @@ const generateBasicAttackMove = () => {
 }
 const generateLastHit = () => {
     let lasthit = Math.random();
-    if (lasthit <= 0.33){
+    if (lasthit <= 0.33) {
         return generateBasicAttackMove();
-    }
-    else if (lasthit <= 0.66){
+    } else if (lasthit <= 0.66) {
         //Heavy Attack Finisher
-        return HEAVY_ATTACKS[randomIntFromInterval(0,HEAVY_ATTACKS.length-1)];
-    }
-    else{
+        return HEAVY_ATTACKS[randomIntFromInterval(0, HEAVY_ATTACKS.length - 1)];
+    } else {
         //Finisher
-        return FINISHER_MOVES[randomIntFromInterval(0,FINISHER_MOVES.length-1)];
+        return FINISHER_MOVES[randomIntFromInterval(0, FINISHER_MOVES.length - 1)];
     }
 }
+
+onLoad();

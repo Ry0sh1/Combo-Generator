@@ -9,7 +9,7 @@ html{
     align-items: center;
     flex-direction: column;
 }
-#generate_combo{
+button{
     background-color: #009a00;
     border-radius: 16px;
     border: none;
@@ -20,11 +20,11 @@ html{
     transition: all 0.15s;
     color: #efefef;
 }
-#generate_combo:hover{
+button:hover{
     background-color: #efefef;
     color: #009a00;
 }
-#generate_combo:active{
+button:active{
     opacity: 0.2;
 }
 #amount_moves{
@@ -63,4 +63,15 @@ html{
     height: 200px;
     font-size: 1.3rem;
     text-align: center;
+}
+.category_container{
+    flex-direction: row;
+    gap: 30px;
+    margin: 20px;
+    width: 600px;
+    height: 40px;
+}
+.move_label{
+    cursor: pointer;
+    text-decoration: underline;
 }
