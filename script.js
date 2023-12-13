@@ -6,6 +6,8 @@
 //Minimum 6 Moves for FINISHER_MOVE
 //Minimum 8 Moves for DEFENSIVE_MOVE
 //Elbow not 4 Times back to back
+//Heavyattack movement defensive don't appear mid combo only last
+
 const BASIC_ATTACKS = ["Kick","Punch","Knee","Elbow"];
 const HEAVY_ATTACKS = ["Heavy Kick","Headbutt","Heavy Punch"];
 const DEFENSIVE = ["Block","Dodge","Take Distance","Parry","Push"];
@@ -14,7 +16,24 @@ const MOVEMENT = ["Backflip","Frontflip","Slide","Spin","Jump","Wallrun","Dash",
 const FINISHER_MOVES = ["Neck Slap","Falcon Punch","Back Break","Downward Kick","Karate Chop"];
 
 const CATEGORIES = [BASIC_ATTACKS,HEAVY_ATTACKS,DEFENSIVE,CROWD_CONTROL,MOVEMENT,FINISHER_MOVES];
-const CATEGORY_NAMES = ["Basic Attacks","Heavy Attacks","Defensive Attacks","Crowd Control","Movement","Finisher Move"]
+const CATEGORIES_DEFINITION = [
+    {"name":"Basic Attacks","category":BASIC_ATTACKS},
+    {"name":"Heavy Attacks","category":HEAVY_ATTACKS},
+    {"name":"Defensive Attacks","category":DEFENSIVE},
+    {"name":"Crowd Control","category":CROWD_CONTROL},
+    {"name":"Movement","category":MOVEMENT},
+    {"name":"Finisher Move","category":FINISHER_MOVES}
+]
+function getCategoryName(categoryValue) {
+    const categoryObject = CATEGORIES_DEFINITION.find(category => category.category === categoryValue);
+
+    if (categoryObject) {
+        return categoryObject.name;
+    } else {
+        return "Category not found";
+    }
+}
+
 let amountMoves = 4; //Minimum is 4
 let finalCombo = [];
 const AMOUNT_MOVES = document.getElementById("amount_moves");
@@ -30,7 +49,7 @@ function onLoad(){
     for (let i = 0;i<CATEGORIES.length;i++){
         let currentCategory = CATEGORIES[i];
         let categoryContainer = document.createElement("div");
-        categoryContainer.id = `category_${CATEGORY_NAMES[i]}`;
+        categoryContainer.id = `category_${getCategoryName(currentCategory)}`;
         categoryContainer.classList.add("category_container");
         categoryContainer.classList.add("centered");
         for (let j = 0;j<currentCategory.length;j++){
@@ -54,10 +73,12 @@ function toggleMove(category,move,moveLabel){
         moveLabel.classList.add("opacity");
         category.splice(index, 1);
         if (category.length===0){
-            CATEGORY_NAMES.splice(CATEGORIES.indexOf(category));
             CATEGORIES.splice(CATEGORIES.indexOf(category));
         }
     }else {
+        if (!CATEGORIES.includes(category)){
+            CATEGORIES.push(category);
+        }
         moveLabel.classList.remove("opacity");
         category.push(move);
     }
@@ -76,6 +97,10 @@ function createCombo(){
         document.getElementById("final_combo").innerText = "Pls add a Basic Attack";
         return;
     }
+    if (BASIC_ATTACKS.length===1 && BASIC_ATTACKS.filter(x => x.includes("Knee")).length === 1){
+        document.getElementById("final_combo").innerText = "A combo with only Knee won't work";
+        return;
+    }
     if (amountMoves<6){
         for (let i = 0;i<moves;i++){
             finalCombo.push(generateBasicAttackMove());
@@ -90,8 +115,8 @@ function createCombo(){
     if (amountMoves >= 8){
         for (let i = 0;i<moves-1;i++){
             if (Math.random()<0.3){
-                let ran = randomIntFromInterval(0,CATEGORIES.length-1);
-                if (ran === CATEGORIES.length-1){
+                let ran = randomIntFromInterval(0,CATEGORIES.length);
+                if (ran === CATEGORIES.length && MOVEMENT.length>0){
                     finalCombo.push(randomCombinedMove());
                 }else {
                     let category = CATEGORIES[ran];
@@ -143,14 +168,14 @@ const generateBasicAttackMove = () => {
 }
 const generateLastHit = () => {
     let lasthit = Math.random();
-    if (lasthit <= 0.33) {
-        return generateBasicAttackMove();
-    } else if (lasthit <= 0.66) {
+    if (lasthit <= 0.66 && HEAVY_ATTACKS.length !== 0) {
         //Heavy Attack Finisher
         return HEAVY_ATTACKS[randomIntFromInterval(0, HEAVY_ATTACKS.length - 1)];
-    } else {
+    } else if (FINISHER_MOVES.length !== 0){
         //Finisher
         return FINISHER_MOVES[randomIntFromInterval(0, FINISHER_MOVES.length - 1)];
+    }else {
+        return generateBasicAttackMove();
     }
 }
 
