@@ -75,3 +75,14 @@ button:active{
     cursor: pointer;
     text-decoration: underline;
 }
+#submit_moves{
+    margin-top: 50px;
+    flex-direction: row;
+    gap: 20px;
+}
+#add_move_name, #add_move_category{
+    font-size: 1.4rem;
+}
+#add_move_button{
+    padding: 10px 20px;
+}

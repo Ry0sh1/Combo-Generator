@@ -1,19 +1,9 @@
-//Finisher Move always in end
-//Combined Move (Movement + Basic attack) = Backflip Kick
-//Opening: x*BASIC_ATTACKS || COMBINED_MOVE + x*BASIC_ATTACKS
-//Elbow cant come after knee
-//FINISHER_MOVES always after CROWD_CONTROL
-//Minimum 6 Moves for FINISHER_MOVE
-//Minimum 8 Moves for DEFENSIVE_MOVE
-//Elbow not 4 Times back to back
-//Heavyattack movement defensive don't appear mid combo only last
-
 const BASIC_ATTACKS = ["Kick","Punch","Knee","Elbow"];
 const HEAVY_ATTACKS = ["Heavy Kick","Headbutt","Heavy Punch"];
 const DEFENSIVE = ["Block","Dodge","Take Distance","Parry","Push"];
 const CROWD_CONTROL = ["Throw","Leg Sweep","Eye Poke"];
 const MOVEMENT = ["Backflip","Frontflip","Slide","Spin","Jump","Wallrun","Dash","Drop"];
-const FINISHER_MOVES = ["Neck Slap","Falcon Punch","Back Break","Downward Kick","Karate Chop"];
+const FINISHER_MOVES = ["Neck Slap","Falcon Punch","Back Break","Downward Kick","Karate Chop","Down Slam"];
 
 const CATEGORIES = [BASIC_ATTACKS,HEAVY_ATTACKS,DEFENSIVE,CROWD_CONTROL,MOVEMENT,FINISHER_MOVES];
 const CATEGORIES_DEFINITION = [
@@ -33,6 +23,16 @@ function getCategoryName(categoryValue) {
         return "Category not found";
     }
 }
+function getCategoryByName(categoryName){
+    const categoryObject = CATEGORIES_DEFINITION.find(category => category.name === categoryName);
+
+    if (categoryObject) {
+        return categoryObject.category;
+    } else {
+        console.log("Category not found");
+        return null;
+    }
+}
 
 let amountMoves = 4; //Minimum is 4
 let finalCombo = [];
@@ -45,13 +45,22 @@ MOVE_SLIDER.oninput = function() {
 }
 
 function onLoad(){
+    document.getElementById("add_move_button").addEventListener("click",function (){
+        addAMove();
+    });
     let moveOverviewContainer = document.getElementById("moves");
+    let select = document.getElementById("add_move_category");
     for (let i = 0;i<CATEGORIES.length;i++){
         let currentCategory = CATEGORIES[i];
         let categoryContainer = document.createElement("div");
         categoryContainer.id = `category_${getCategoryName(currentCategory)}`;
         categoryContainer.classList.add("category_container");
         categoryContainer.classList.add("centered");
+
+        let option = document.createElement("option");
+        option.innerText = `${getCategoryName(currentCategory)}`;
+        option.value = `${getCategoryName(currentCategory)}`;
+
         for (let j = 0;j<currentCategory.length;j++){
             let moveLabel = document.createElement("label");
             let move = `${currentCategory[j]}`;
@@ -63,8 +72,25 @@ function onLoad(){
             });
             categoryContainer.append(moveLabel);
         }
+        select.append(option);
         moveOverviewContainer.append(categoryContainer);
     }
+}
+
+function addAMove(){
+    let move = document.getElementById("add_move_name").value;
+    let category = document.getElementById("add_move_category").value;
+    getCategoryByName(category).push(move);
+    let categoryContainer = document.getElementById(`category_${category}`);
+    let moveLabel = document.createElement("label");
+    moveLabel.id = `move_${move}`
+    moveLabel.innerText = `${move}`;
+    moveLabel.classList.add("move_label");
+    moveLabel.addEventListener("click",function () {
+        toggleMove(getCategoryByName(category),move,moveLabel)
+    });
+    categoryContainer.append(moveLabel);
+    document.getElementById("add_move_name").value = "";
 }
 
 function toggleMove(category,move,moveLabel){
